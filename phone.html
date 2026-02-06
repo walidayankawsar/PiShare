@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile File Transfer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+            padding-top: 40px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .option-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+        
+        .card-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 48px;
+        }
+        
+        .card-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .card-desc {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            color: white;
+            margin-top: 60px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .feature-item {
+            padding: 20px;
+        }
+        
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-text {
+            font-size: 18px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            padding: 40px 20px;
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .header p {
+                font-size: 18px;
+            }
+            
+            .main-options {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .option-card {
+                padding: 30px 20px;
+            }
+            
+            .card-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 36px;
+            }
+            
+            .card-title {
+                font-size: 24px;
+            }
+            
+            .features {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .card-title {
+                font-size: 22px;
+            }
+            
+            .features h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Menu -->
+        <div class="header">
+            <h1>PiShare</h1>
+            <p>Send and receive files instantly across all your devices</p>
+        </div>
+        
+        <div class="main-options">
+            <a href="#" class="option-card">
+                <div class="card-icon">📤</div>
+                <h3 class="card-title">Send Files</h3>
+                <p class="card-desc">Upload files and share with anyone using a simple code. Fast and secure transfers.</p>
+            </a>
+            
+            <a href="#" class="option-card">
+                <div class="card-icon">📥</div>
+                <h3 class="card-title">Receive Files</h3>
+                <p class="card-desc">Connect and download your files. No registration required.</p>
+            </a>
+        </div>
+        
+        <div class="features">
+            <h2>Why Choose Our Service</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <div class="feature-text">Fast Transfers</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔒</span>
+                    <div class="feature-text">Secure & Private</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🌐</span>
+                    <div class="feature-text">Works on All Devices</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <div class="feature-text">No App Required</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        Mobile File Transfer App © 2023 | Works on Mobile, Tablet & Desktop
+    </div>
+</body>
+</html>
