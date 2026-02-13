@@ -19,7 +19,7 @@ def cleanup():
 
 def home(request):
     cleanup()
-    session = Session.objects.create(sender_role='laptop')
+    session = Session.objects.create(sender_role='Laptop or Desktop')
     qr_url = request.build_absolute_uri(f'/connect/{session.id}/') #url make
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(qr_url)
