@@ -12,7 +12,7 @@ class Session(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to='files/', null=True, blank=True)
-    sender_role = models.CharField(max_length=20, default='laptop') #laptop, phone
+    sender_role = models.CharField(max_length=20, default='Laptop or Desktop') #laptop or desktop, phone
     status = models.CharField(max_length=20, default='waiting') #waiting, file_sent, expired
 
     def is_expired(self):
