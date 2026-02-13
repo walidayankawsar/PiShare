@@ -20,7 +20,7 @@ def cleanup():
 def home(request):
     cleanup()
     session = Session.objects.create(sender_role='Laptop or Desktop')
-    qr_url = request.build_absolute_uri(f'/connect/{session.id}/') #url make
+    qr_url = request.build_absolute_uri(f'/connect/{session.id}/') #url make * aita connect page er url so connect views and url make korte hobe.
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(qr_url)
     qr.make(fit=True)
@@ -34,4 +34,15 @@ def home(request):
     return render(request, 'index.html', {
         'qr_code': qr_base64,
         'session_id': str(session.id)
+    })
+
+
+
+def connect(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+    if session.is_expired():
+        return HttpResponse("This session has expired.", status=410)
+    return render(request, 'phone.html', {
+        'session_id': session_id
     })
