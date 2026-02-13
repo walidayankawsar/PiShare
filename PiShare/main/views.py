@@ -5,6 +5,8 @@ from .forms import FileForm
 import qrcode
 from django.conf import settings
 
+from io import BytesIO
+import base64
 
 # Create your views here.
 
@@ -17,4 +19,19 @@ def cleanup():
 
 def home(request):
     cleanup()
-    return render(request, 'index.html')
+    session = Session.objects.create(sender_role='laptop')
+    qr_url = request.build_absolute_uri(f'/connect/{session.id}/') #url make
+    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    qr.add_data(qr_url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color='black', back_color='white')
+                                                                    # QR image ke HTML page e show korar jonno text format e convert kora.Because browser directly Python image object bujhe na.
+
+    buffer = BytesIO() # BytesIO() holo ekta temporary memory file.
+    img.save(buffer, format='PNG')
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    return render(request, 'index.html', {
+        'qr_code': qr_base64,
+        'session_id': str(session.id)
+    })
