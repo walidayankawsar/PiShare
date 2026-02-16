@@ -62,7 +62,7 @@ def send_from_phone(request, session_id):
             session.file = request.FILES['file']
             session.status = 'file_sent'
             session.save()
-            return render(request, 'sent_file.html', {'form': form})
+            return render(request, 'sent_file.html', {'form': form, 'session_id': session_id})
     else:
         form = FileForm()
     return render(request, 'sent_file.html', {'session_id': session_id})
