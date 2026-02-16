@@ -46,3 +46,23 @@ def connect(request, session_id):
     return render(request, 'phone.html', {
         'session_id': session_id
     })
+
+
+
+def send_from_phone(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+
+    if session.is_expired():
+        return HttpResponse("Session expired", status=410)
+    
+    if request.method == "POST":
+        form = FileForm(request.POST, request.FILES)
+        if form.is_valid():
+            session.file = request.FILES['file']
+            session.status = 'file_sent'
+            session.save()
+            return render(request, 'sent_file.html', {'form': form})
+    else:
+        form = FileForm()
+    return render(request, 'sent_file.html', {'session_id': session_id})
