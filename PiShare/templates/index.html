@@ -120,7 +120,7 @@
     }
     footer {
       text-align: center;
-      color: #25518f;
+      color: #3a82e7;
       margin-top: 4rem;
       font-size: 0.9rem;
     }
@@ -166,4 +166,17 @@
     </pre>
   </footer>
 </body>
+
+<script>
+setInterval(() => {
+    fetch("/check/{{ session_id }}/")
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "file_sent") {
+            window.location.href = "/receive/{{ session_id }}/";
+        }
+    });
+}, 1000);
+</script>
+
 </html>
