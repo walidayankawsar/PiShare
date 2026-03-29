@@ -13,7 +13,12 @@ class Session(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to='files/', null=True, blank=True)
     sender_role = models.CharField(max_length=20, default='Laptop or Desktop') #laptop or desktop, phone
-    status = models.CharField(max_length=20, default='waiting') #waiting, file_sent, expired
+    status_choices =[
+        ('waiting', 'waiting'),
+        ('file_sent', 'file_sent'),
+        ('expired', 'expired')
+    ]
+    status = models.CharField(max_length=20, choices=status_choices, default='waiting') #waiting, file_sent, expired
 
     def is_expired(self):
         return timezone.now()> self.created_at + timedelta(minutes=30)
