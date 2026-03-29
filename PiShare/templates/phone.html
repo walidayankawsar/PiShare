@@ -140,13 +140,11 @@
         }
         
         /* Footer */
-        .footer {
+        footer {
             text-align: center;
-            color: rgba(255,255,255,0.8);
-            font-size: 16px;
-            padding: 40px 20px;
-            margin-top: auto;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+            margin-top: 4rem;
+            font-size: 0.9rem;
         }
         
         /* Responsive adjustments */
@@ -217,7 +215,7 @@
                 <p class="card-desc">Upload files and share with anyone using a QR code. Fast and secure transfers.</p>
             </a>
             
-            <a href="#" class="option-card">
+            <a href="{% url 'check' session_id %}" class="option-card">
                 <div class="card-icon">📥</div>
                 <h3 class="card-title">Receive Files</h3>
                 <p class="card-desc">Connect and download your files. No registration required.</p>
@@ -247,11 +245,11 @@
         </div>
     </div>
     
-  <footer>
-    <pre>
-      • PiShare
-      @walidayankawsar
-    </pre>
-  </footer>
+    <footer>
+        <pre>
+        • PiShare
+        @walidayankawsar
+        </pre>
+    </footer>
 </body>
 </html>
