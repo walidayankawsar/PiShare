@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('connect/<uuid:session_id>/', views.connect, name='connect'),
-    path('sent_file/<uuid:session_id>/', views.send_from_phone, name='sent')
+    path('sent_file/<uuid:session_id>/', views.send_from_phone, name='sent'),
+    path('check/<uuid:session_id>/', views.check_status, name='check')
 ]
