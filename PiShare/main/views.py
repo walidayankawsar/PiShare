@@ -66,3 +66,8 @@ def send_from_phone(request, session_id):
     else:
         form = FileForm()
     return render(request, 'sent_file.html', {'session_id': session_id})
+
+
+def check_status(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+    return render(request, 'receive.html')
