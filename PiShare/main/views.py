@@ -68,6 +68,27 @@ def send_from_phone(request, session_id):
     return render(request, 'sent_file.html', {'session_id': session_id})
 
 
-def check_status(request, session_id):
+def receive_from_phone(request, session_id):
+    cleanup()
     session = get_object_or_404(Session, id=session_id)
-    return render(request, 'receive.html')
+    if session.is_expired():
+        return JsonResponse({'status': 'expaired'})
+    
+    session.status = 'file_sent'
+    session.save()
+    return render(request, 'receive.html', {'session_id' :session_id})
+
+
+def check_receive(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+    if session.is_expired():
+        return HttpResponse('Session expired', status= 410)
+    
+    if session.status == 'file_sent':
+        return render(request, 'sand_file.html', {'session_id': session_id})
+    
+    return render(request, 'index.html', {
+        'qr_code': None,
+        'session_id': str(session.id)
+    })
