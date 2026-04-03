@@ -16,7 +16,8 @@ class Session(models.Model):
     status_choices =[
         ('waiting', 'waiting'),
         ('file_sent', 'file_sent'),
-        ('expired', 'expired')
+        ('expired', 'expired'),
+        ('file_receive', 'file_receive')
     ]
     status = models.CharField(max_length=20, choices=status_choices, default='waiting') #waiting, file_sent, expired
 
