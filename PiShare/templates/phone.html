@@ -219,7 +219,7 @@
                 {% csrf_token %}
                 <button type="submit" class="option-card" style="border: none; background: none; padding: 0; width: 100%; text-align: left;">
                     <div class="card-icon">📥</div>
-                    <h3 class="card-title">Receive Files</h3>
+                    <h3 id="sendBtn" class="card-title">Receive Files</h3>
                     <p class="card-desc">Connect and download your files. No registration required.</p>
                 </button>
             </form>
@@ -256,4 +256,18 @@
         </pre>
     </footer>
 </body>
+
+<button id="sendBtn">ফাইল পাঠাও</button>
+
+<script>
+  document.getElementById('sendBtn').addEventListener('click', async () => {
+    await fetch(`/receive-from-phone/{{ session_id }}/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    });
+    alert('Desktop এ notification পাঠানো হয়েছে!');
+  });
+</script>
+
+
 </html>
