@@ -77,7 +77,7 @@ def receive_from_phone(request, session_id):
     if request.method == 'POST':
         session.status = 'file_sent'
         session.save()
-        return JsonResponse({'status': 'ok'})
+        return redirect('receive', session_id=session_id)
 
     return render(request, 'receive.html', {'session_id': session_id})
 
@@ -90,3 +90,15 @@ def check_receive(request, session_id):
         return JsonResponse({'status': 'expired'})
 
     return JsonResponse({'status': session.status})
+
+
+def receive(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+
+    if session.is_expired():
+        return JsonResponse({'status': 'expired'})
+
+    return render(request, 'receive.html', {'session_id': session_id})
+
+
