@@ -166,4 +166,23 @@
     </pre>
   </footer>
 </body>
+
+<script>
+  const sessionId = "{{ session_id }}";
+
+  const interval = setInterval(async () => {
+    const res = await fetch(`/check_receive/${sessionId}/`);
+    const data = await res.json();
+
+    if (data.status === 'file_sent') {
+      clearInterval(interval);
+      // যেকোনো page-এ redirect করো, যেমন download page
+      window.location.href = `/download/${sessionId}/`;
+    } else if (data.status === 'expired') {
+      clearInterval(interval);
+      window.location.href = '/'; // নতুন session বানাতে home-এ পাঠাও
+    }
+  }, 3000); // প্রতি 3 সেকেন্ডে check করবে
+</script>
+
 </html>
