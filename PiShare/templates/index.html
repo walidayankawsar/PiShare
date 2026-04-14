@@ -140,7 +140,7 @@
 
   <div class="container-main">
     <div class="card">
-      <div class="card-header"><a href="#" style="text-decoration: none; color: white;">• Home</a><a href="#" style="text-decoration: none; color: white;"> • Send File</a><a href="#" style="text-decoration: none; color: white;"> • Receive File</a></div>
+      <div class="card-header"><a href="#" style="text-decoration: none; color: white;">• Home</a><a href="{% url 'send_file' session_id %}" style="text-decoration: none; color: white;"> • Send File</a><a href="{% url 'receive_file' session_id %}" style="text-decoration: none; color: white;"> • Receive File</a></div>
         <div class="card-body p-4">
           <div class="text-center">
             <button type="button" class="btn btn-primary btn-lg px-5" disabled>
@@ -166,23 +166,4 @@
     </pre>
   </footer>
 </body>
-
-<script>
-  const sessionId = "{{ session_id }}";
-
-  const interval = setInterval(async () => {
-    const res = await fetch(`/check_receive/${sessionId}/`);
-    const data = await res.json();
-
-    if (data.status === 'file_sent') {
-      clearInterval(interval);
-      // যেকোনো page-এ redirect করো, যেমন download page
-      window.location.href = `/download/${sessionId}/`;
-    } else if (data.status === 'expired') {
-      clearInterval(interval);
-      window.location.href = '/'; // নতুন session বানাতে home-এ পাঠাও
-    }
-  }, 3000); // প্রতি 3 সেকেন্ডে check করবে
-</script>
-
 </html>
