@@ -18,7 +18,17 @@ def cleanup():
 
 def home(request):
     cleanup()
-    session = Session.objects.create(sender_role='Laptop or Desktop')
+
+    if 'session_id' in request.session:
+        session = Session.objects.filter(id=request.session['session_id']).first()
+        if not session or session.is_expired():
+            session = Session.objects.create(sender_role='Laptop or Desktop')
+            request.session['session_id'] = str(session.id)
+    else:
+        session = Session.objects.create(sender_role='Laptop or Desktop')
+        request.session['session_id'] = str(session.id)
+
+
     # url make * aita connect page er url so connect views and url make korte hobe.
     qr_url = request.build_absolute_uri(f'/connect/{session.id}/')
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
@@ -43,5 +53,25 @@ def connect(request, session_id):
     if session.is_expired():
         return HttpResponse("This session has expired.", status=410)
     return render(request, 'phone.html', {
+        'session_id': session_id
+    })
+
+
+def send_file(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+    if session.is_expired():
+        return HttpResponse("This session has expired.", status=410)
+    return render(request, 'sent_file.html', {
+        'session_id': session_id
+    })
+
+
+def receive_file(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+    if session.is_expired():
+        return HttpResponse("This session has expired.", status=410)
+    return render(request, 'receive.html', {
         'session_id': session_id
     })
