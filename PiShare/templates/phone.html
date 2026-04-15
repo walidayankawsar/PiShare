@@ -209,13 +209,13 @@
         </div>
         
         <div class="main-options">
-            <a href="#" class="option-card">
+            <a href="{% url 'send_file' session_id %}" class="option-card">
                 <div class="card-icon">📤</div>
                 <h3 class="card-title">Send Files</h3>
                 <p class="card-desc">Upload files and share with anyone using a QR code. Fast and secure transfers.</p>
             </a>
 
-            <a href="#" class="option-card">
+            <a href="{% url 'receive_file' session_id %}" class="option-card">
                 <div class="card-icon">📥</div>
                 <h3 class="card-title">Receive Files</h3>
                 <p class="card-desc">Connect and download your files. No registration required.</p>
