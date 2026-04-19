@@ -35,7 +35,7 @@ class Session(models.Model):
 class TransferFile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='files')
-    file = models.FileField('upload_to=file/')
+    file = models.FileField(upload_to='files/')
     original_name = models.CharField(max_length=255)
     file_size = models.BigIntegerField()
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -51,4 +51,4 @@ class TransferFile(models.Model):
             if self.file_size < 1024.0:
                 return f"{self.file_size:.1f} {unit}"
             self.file_size /= 1024.0
-            return f"{self.file_size:1f} TB"
+        return f"{self.file_size:1f} TB"
