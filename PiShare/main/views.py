@@ -4,6 +4,7 @@ from .models import Session
 from .forms import FileForm
 import qrcode
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 from io import BytesIO
 import base64
@@ -72,6 +73,41 @@ def receive_file(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     if session.is_expired():
         return HttpResponse("This session has expired.", status=410)
+
+    files = session.files.all().orderby('-uploaded_at')
+
     return render(request, 'receive.html', {
-        'session_id': session_id
+        'session_id': session_id,
+        'files': files
     })
+
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def upload_file(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+
+    if session.is_expired():
+        return JsonResponse({'error': 'Session expired'}, status=410)
+
+    if 'file' not in request.FILES:
+        return JsonResponse({'error': 'No file provided'}, status=400)
+
+    uploaded_file = request.FILES['file']
+
+
+    transfer_file = TransferFile.objects.create(
+        session = session,
+        file = uploaded_file,
+        orignal_name = uploaded_file.name,
+        file_size = uploaded_file.size
+    )
+
+
+    if session.status == 'waiting':
+        session.status = 'file_sent'
+        session.save()
+
+    return response
