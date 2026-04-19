@@ -77,6 +77,14 @@
     <p class="opacity-75">• No login • Files auto delete after 10 minutes</p>
 </header>
 
+
+
+
+
+<h1 class="display-4 fw-bold mb-2">PiShare</h1>
+<p class="lead fs-4 opacity-90">Receive files via QR Code</p>
+<p class="opacity-75">• No login • Files auto delete after 30 minutes</p>
+
 <div class="container-main">
     <div class="card">
         <div class="card-header"><a href="{% url 'home'%}" style="text-decoration: none; color: white;">• Home</a> • Receive file</div>
@@ -88,29 +96,38 @@
                     {% for file in files %}
                     <div class="d-flex justify-content-between align-items-center border-bottom py-3">
                         <div>
-                            <strong>{{ file.name }}</strong><br>
-                            <small class="text-muted">{{ file.size|filesizeformat }}</small>
+                            <strong>{{ file.original_name }}</strong><br>
+                            <small class="text-muted">{{ file.get_file_size_readable }}</small>
+                            <br>
+                            <small class="text-muted">Uploaded: {{ file.uploaded_at|date:"Y-m-d H:i" }}</small>
                         </div>
-                        <a href="{{ file.url }}" class="btn btn-primary btn-sm">Download</a>
+                        <a href="{% url 'download_file' session_id file.id %}" class="btn btn-primary btn-sm">Download</a>
                     </div>
                     {% endfor %}
                 </div>
                 
                 <div class="text-center mt-4">
-                    <a href="{% url 'download_all' %}" class="btn btn-primary">
+                    <a href="{% url 'download_all' session_id %}" class="btn btn-primary">
                         Download All as ZIP
                     </a>
                 </div>
             {% else %}
                 <div class="text-center py-5">
-                    <h4 class="text-muted">No files found</h4>
-                    <p class="text-muted">The QR code may be expired or invalid.</p>
-                    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Go to Home</a>
+                    <p class="mb-3">No files have been sent to this session yet.</p>
+                    <p class="text-muted">Share the QR code with someone to receive files.</p>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Go Back Home</a>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+<!-- Auto-refresh every 5 seconds to check for new files -->
+<script>
+setInterval(function() {
+    location.reload();
+}, 5000);
+</script>
 
 <footer>
     <pre>
