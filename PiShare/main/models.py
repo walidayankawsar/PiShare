@@ -29,3 +29,26 @@ class Session(models.Model):
             if self.file:
                 self.file.delete(save=False)
             self.delete()
+
+
+
+class TransferFile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='files')
+    file = models.FileField('upload_to=file/')
+    original_name = models.CharField(max_length=255)
+    file_size = models.BigIntegerField()
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def cleanup(self):
+        if self.is_expired():
+            if self.file:
+                self.file.delete(save=False)
+            self.delete()
+
+    def get_file_size_readable(self):
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if self.file_size < 1024.0:
+                return f"{self.file_size:.1f} {unit}"
+            self.file_size /= 1024.0
+            return f"{self.file_size:1f} TB"
