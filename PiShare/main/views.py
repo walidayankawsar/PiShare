@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
-from .models import Session
+from .models import Session, TransferFile
 from .forms import FileForm
 import qrcode
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+import zipfile
 
 from io import BytesIO
 import base64
@@ -75,7 +76,7 @@ def receive_file(request, session_id):
     if session.is_expired():
         return HttpResponse("This session has expired.", status=410)
 
-    files = session.files.all().orderby('-uploaded_at')
+    files = session.files.all().order_by('-uploaded_at')
 
     return render(request, 'receive.html', {
         'session_id': session_id,
@@ -102,7 +103,7 @@ def upload_file(request, session_id):
     transfer_file = TransferFile.objects.create(
         session = session,
         file = uploaded_file,
-        orignal_name = uploaded_file.name,
+        original_name = uploaded_file.name,
         file_size = uploaded_file.size
     )
 
@@ -111,4 +112,60 @@ def upload_file(request, session_id):
         session.status = 'file_sent'
         session.save()
 
+    return JsonResponse({
+        'success': True,
+        'file_id': str(transfer_file.id),
+        'file_name': transfer_file.original_name,
+        'file_size': transfer_file.get_file_size_readable()
+    })
+
+
+
+def download_file(request, session_id, file_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+
+    if session.is_expired():
+        return HttpResponse("Session expired", status=410)
+
+    transfer_file = get_object_or_404(TransferFile, id=file_id, session=session)
+
+    response = HttpResponse(transfer_file.file.read(), content_type='application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename="{transfer_file.original_name}"'
+
+    if session.status != 'file_receive':
+        session.status = 'file_receive'
+        session.save()
+    return response
+
+
+def download_all_files(request, session_id):
+    cleanup()
+    session = get_object_or_404(Session, id=session_id)
+
+    if session.is_expired():
+        return HttpResponse('Session expired', status=410)
+
+    files = session.files.all()
+
+    if not files:
+        return HttpResponse("No files to download", status=404)
+
+    zip_buffer = BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for transfer_file in files:
+            zip_file.writestr(
+                transfer_file.original_name,
+                transfer_file.file.read()
+            )
+
+
+    zip_buffer.seek(0)
+    response = HttpResponse(zip_buffer.read(), content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="files_{session_id}.zip"'
+
+
+    if session.status != 'file_receive':
+        session.status = 'file_receive'
+        session.save()
     return response
