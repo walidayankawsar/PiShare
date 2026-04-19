@@ -58,6 +58,92 @@ footer { text-align: center; color: #94a3b8; margin-top: 4rem; font-size: 0.9rem
     </div>
   </div>
 </div>
+
+
+
+
+<div class="container-main">
+  <div class="card">
+    <div class="card-header"><a href="{% url 'home'%}" style="text-decoration: none; color: white;">• Home</a> • Upload File</div>
+    <div class="card-body p-4">
+      
+      <div id="upload-section">
+        <!-- Single File Upload Form -->
+        <form id="upload-form" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="file" id="file-input" required class="form-control mb-3">
+          <button type="submit" class="btn btn-primary" id="upload-btn">Send File</button>
+        </form>
+        
+        <div id="upload-status" class="mt-3" style="display: none;">
+          <div class="alert alert-info">Uploading...</div>
+        </div>
+        
+        <div id="success-message" class="mt-3" style="display: none;">
+          <div class="alert alert-success">
+            File uploaded successfully!
+          </div>
+          <a href="{% url 'receive_file' session_id %}" class="btn btn-secondary">View Received Files</a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('upload-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('file-input');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('Please select a file');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const uploadBtn = document.getElementById('upload-btn');
+    const uploadStatus = document.getElementById('upload-status');
+    const uploadSection = document.getElementById('upload-section');
+    const successMsg = document.getElementById('success-message');
+    
+    // Show uploading status
+    uploadBtn.disabled = true;
+    uploadStatus.style.display = 'block';
+    
+    try {
+        const response = await fetch(`/api/upload/{{ session_id }}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Show success message
+            uploadStatus.style.display = 'none';
+            uploadSection.style.display = 'none';
+            successMsg.style.display = 'block';
+        } else {
+            throw new Error(data.error || 'Upload failed');
+        }
+    } catch (error) {
+        uploadStatus.style.display = 'none';
+        alert('Upload failed: ' + error.message);
+        uploadBtn.disabled = false;
+    }
+});
+</script>
+
+
+
 <footer>
   <pre>
     • PiShare
