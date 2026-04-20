@@ -42,29 +42,9 @@ footer { text-align: center; color: #94a3b8; margin-top: 4rem; font-size: 0.9rem
   <p class="lead fs-4 opacity-90">Send a file between devices using only QR codes</p>
   <p class="opacity-75">• No login required • Just select a file • Auto delete after 10 minutes</p>
 </header>
-
 <div class="container-main">
   <div class="card">
-    <div class="card-header"><a href="{% url 'home'%}" style="text-decoration: none; color: white;">• Home</a> • Upload File</div>
-    <div class="card-body p-4">
-
-      <!-- Single File Upload Form -->
-      <form method="POST" action="#" enctype="multipart/form-data">
-          {% csrf_token %}
-          <input type="file" name="file" required class="form-control mb-3">
-          <button type="submit" class="btn btn-primary">Send File</button>
-      </form>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-<div class="container-main">
-  <div class="card">
-    <div class="card-header"><a href="{% url 'home'%}" style="text-decoration: none; color: white;">• Home</a> • Upload File</div>
+    <div class="card-header"><a href="{% url 'connect' session_id %}" style="text-decoration: none; color: white;">• Home</a> • Upload File</div>
     <div class="card-body p-4">
       
       <div id="upload-section">
