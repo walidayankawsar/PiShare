@@ -78,16 +78,9 @@
 </header>
 
 
-
-
-
-<h1 class="display-4 fw-bold mb-2">PiShare</h1>
-<p class="lead fs-4 opacity-90">Receive files via QR Code</p>
-<p class="opacity-75">• No login • Files auto delete after 30 minutes</p>
-
 <div class="container-main">
     <div class="card">
-        <div class="card-header"><a href="{% url 'home'%}" style="text-decoration: none; color: white;">• Home</a> • Receive file</div>
+        <div class="card-header"><a href="{% url 'connect' session_id %}" style="text-decoration: none; color: white;">• Home</a> • Receive file</div>
         
         <div class="card-body p-4">
             {% if files %}
@@ -107,15 +100,15 @@
                 </div>
                 
                 <div class="text-center mt-4">
-                    <a href="{% url 'download_all' session_id %}" class="btn btn-primary">
-                        Download All as ZIP
+                    <a href="#" class="btn btn-primary">
+                        Delete all file
                     </a>
                 </div>
             {% else %}
                 <div class="text-center py-5">
                     <p class="mb-3">No files have been sent to this session yet.</p>
                     <p class="text-muted">Share the QR code with someone to receive files.</p>
-                    <a href="{% url 'home' %}" class="btn btn-secondary">Go Back Home</a>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Go Back to QR Page</a>
                 </div>
             {% endif %}
         </div>
