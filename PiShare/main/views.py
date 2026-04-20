@@ -6,7 +6,6 @@ import qrcode
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-import zipfile
 
 from io import BytesIO
 import base64
@@ -139,33 +138,14 @@ def download_file(request, session_id, file_id):
     return response
 
 
-def download_all_files(request, session_id):
+def delete_file(request, session_id):
     cleanup()
     session = get_object_or_404(Session, id=session_id)
 
     if session.is_expired():
         return HttpResponse('Session expired', status=410)
 
-    files = session.files.all()
 
-    if not files:
-        return HttpResponse("No files to download", status=404)
-
-    zip_buffer = BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        for transfer_file in files:
-            zip_file.writestr(
-                transfer_file.original_name,
-                transfer_file.file.read()
-            )
-
-
-    zip_buffer.seek(0)
-    response = HttpResponse(zip_buffer.read(), content_type='application/zip')
-    response['Content-Disposition'] = f'attachment; filename="files_{session_id}.zip"'
-
-
-    if session.status != 'file_receive':
-        session.status = 'file_receive'
-        session.save()
-    return response
+    for file in session.files.all():
+        file.delete()
+    return redirect('receive_file', session_id=session_id)
