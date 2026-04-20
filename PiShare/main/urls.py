@@ -11,7 +11,7 @@ urlpatterns = [
 
     path('api/upload/<uuid:session_id>/', views.upload_file, name='upload_file'),
     path('api/download/<uuid:session_id>/<uuid:file_id>/', views.download_file, name='download_file'),
-    path('api/download-all/<uuid:session_id>/', views.download_all_files, name='download_all'),
+    path('delete/<uuid:session_id>/', views.delete_file, name='delete'),
 ]
 
 
